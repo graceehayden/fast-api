@@ -14,9 +14,8 @@ Test data in `planning.json`. Imported with 'populate_db.py'.
 ##### NOTES #####
 Steps to run this implementation:
  - start up virtual environment  (python3 -m venv venv; source venv/bin/activate)
- - run “pip install requirements.txt” (apologies if anything was omitted!)
+ - run “pip install -r requirements.txt”
  - run "python3 -m uvicorn events:app --reload"
-          or just "uvicorn events:app --reload"
-- visit the home page so the tables will be created (127.0.0.1:8000/)
-- run "python3 populate_db.py" to populate the DB
-- visit the refreshed home page
+ - visit the home page so the tables will be created (127.0.0.1:8000/)
+ - stop server and run "python3 populate_db.py" to populate the DB (records processed message will display when it's done)
+ - restart server and visit the refreshed home page
