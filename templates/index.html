@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<head>
+  <script type="text/javascript">
+    function nextUrl(current_url) {
+      var baseUrl = current_url.split('?')[0];
+      let newUrl = new URL(current_url);
+      let search_params = newUrl.searchParams;
+      if (!newUrl.searchParams.has('search_term')){
+        return current_url;
+      };
+      let page = 1
+      if (newUrl.searchParams.has('page')) {
+          page = parseInt(newUrl.searchParams.get('page')) + 1;
+      };
+      search_params.set('page', page);
+      return baseUrl + "?" + search_params
+    };
+
+    function prevUrl(current_url) {
+      var baseUrl = current_url.split('?')[0];
+      let newUrl = new URL(current_url);
+      let search_params = newUrl.searchParams;
+      if (newUrl.searchParams.has('page')) {
+        let page = parseInt(newUrl.searchParams.get('page')) - 1;
+        search_params.set('page', page);
+        return baseUrl + "?" + search_params
+      };
+    }
+  </script>
+</head>
+
+{% block title %}
+  <title>Planning Dashboard</title>
+{% endblock %}
+
+{% block content %}
+
+  <div style="text-align: right;">
+  <form action="/">
+    <input name="search_term" type="search" placeholder="Operating Unit 3">
+    <button type="submit">Search by Operating Unit</button>
+    <br>
+    <label for="sort_by_date">Sort by Start Date?</label>
+    <input type="checkbox" name="sort_by_date" value="True">
+  </form>
+  </div>
+
+  {% if events %}
+    {% if events.page and events.page != 1 %}
+      <a href="javascript:document.location.href=prevUrl('{{ request.url }}');">
+        Prev
+      </a>
+    {% endif %}
+    <a href="javascript:document.location.href=nextUrl('{{ request.url }}');">
+      Next
+    </a>
+  {% endif %}
+
+  {% if message %}
+    <h1 style="text-align: center;">{{ message }}</h1>
+  {% else %}
+    <div>
+      <div style="text-align: center;">
+        <h1>Events List</h1>
+        {{ events.total }} events listed.<br>
+        {{ events.size }} events per page.
+      </div>
+
+      {% for event in events.items %}
+        <table style="text-align: left; padding: 10 0 10 100;">
+          {% for key, value in event %}
+            <tr>
+            <th>{{ key }}:</th>
+            <td>{{ value }} </td>
+            </tr>
+          {% endfor %}
+        </table>
+        <hr>
+
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endblock %}
